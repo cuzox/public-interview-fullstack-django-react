@@ -1,0 +1,12 @@
+# python
+*.pyc
+__pycache
+
+# node
+node_modules
+
+# system
+.DS_Store
+
+# generated dirs & files
+./data
