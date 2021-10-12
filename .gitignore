@@ -10,3 +10,4 @@ node_modules
 
 # generated dirs & files
 ./data
+yarn.lock
