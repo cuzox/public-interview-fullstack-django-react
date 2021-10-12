@@ -22,10 +22,10 @@ const App = () => {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div>
+    <>
       {userState === 'guest' && (<LoggedOut />)}
       {userState === 'authed' && (<LoggedIn />)}
-    </div>
+    </>
   )
 }
 
