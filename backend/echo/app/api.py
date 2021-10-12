@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -12,3 +13,9 @@ def bootstrap(request):
     return Response({
         'authed': False,
     })
+
+@csrf_exempt
+@api_view(['PATCH'])
+def login(request):
+    breakpoint()
+    # user = authenticate(username='john', password='secret')
