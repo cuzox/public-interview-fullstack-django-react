@@ -21,55 +21,41 @@ const NewQuery = () => {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return typeof initialContent === 'string' && (
-    <main
+    <div
       css={css`
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        padding: 64px;
-
-        .editor-wrap {
-          max-width: 1000px;
-          width: 100%;
-        }
-
-        .vert-space {
-          display: block;
-          height: 24px;
-        }
+        max-width: 1000px;
+        width: 100%;
       `}
     >
-      <div className='editor-wrap'>
-        <CodeEditor
-          id='config'
-          ref={refEditor}
-          language='sql'
-          placeholder='select * from table'
-          defaultValue={initialContent}
-        />
+      <CodeEditor
+        id='config'
+        ref={refEditor}
+        language='sql'
+        placeholder='select * from table'
+        defaultValue={initialContent}
+      />
 
-        <span className='vert-space' />
+      <span className='vert-space' />
 
-        <nav
-          css={css`
-            display: flex;
-            flex-direction: row-reverse;
-          `}
+      <nav
+        css={css`
+          display: flex;
+          flex-direction: row-reverse;
+        `}
+      >
+        <Button
+          onClick={async (event) => {
+            event.preventDefault()
+            await api.put(`/query/${pk}`, {
+              content: refEditor.current.value,
+            })
+            alert('query updated')
+          }}
         >
-          <Button
-            onClick={async (event) => {
-              event.preventDefault()
-              await api.put(`/query/${pk}`, {
-                content: refEditor.current.value,
-              })
-              alert('query updated')
-            }}
-          >
-            Update
-          </Button>
-        </nav>
-      </div>
-    </main>
+          Update
+        </Button>
+      </nav>
+    </div>
   )
 }
 

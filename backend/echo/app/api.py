@@ -122,7 +122,7 @@ def query(request, pk=None):
 @login_required
 @api_view(['GET'])
 def queries(request):
-    ids = models.SavedQueries.objects.annotate(
+    results = models.SavedQueries.objects.annotate(
         user_name=Concat(
             F('user__first_name'),
             Value(' '),
@@ -130,7 +130,6 @@ def queries(request):
             output_field=CharField()
         )
     ).values('id', 'user_id', 'user_name').all()
-    ids = list(ids)
     return Response({
-        'ids': ids,
+        'queries': list(results),
     })

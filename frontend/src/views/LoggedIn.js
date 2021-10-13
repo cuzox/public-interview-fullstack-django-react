@@ -12,6 +12,11 @@ const LoggedIn = ({ userInfo = {}, onLogout = () => {} }) => (
       display: flex;
       flex-direction: column;
       width: 100%;
+
+      .vert-space {
+        display: block;
+        height: 24px;
+      }
     `}
   >
     <header
@@ -29,19 +34,33 @@ const LoggedIn = ({ userInfo = {}, onLogout = () => {} }) => (
       <a href='/logout'>Logout</a>
     </header>
 
-    <Switch>
-      <Route path='/query/new'>
-        <NewQuery />
-      </Route>
+    <main
+      css={css`
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        padding: 64px;
 
-      <Route path='/query/:pk'>
-        <ExistingQuery />
-      </Route>
+        .vert-space {
+          display: block;
+          height: 24px;
+        }
+      `}
+    >
+      <Switch>
+        <Route path='/query/new'>
+          <NewQuery />
+        </Route>
 
-      <Route>
-        <QueriesList />
-      </Route>
-    </Switch>
+        <Route path='/query/:pk'>
+          <ExistingQuery />
+        </Route>
+
+        <Route>
+          <QueriesList />
+        </Route>
+      </Switch>
+    </main>
   </div>
 )
 

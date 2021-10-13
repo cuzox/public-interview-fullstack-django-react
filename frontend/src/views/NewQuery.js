@@ -12,25 +12,13 @@ const NewQuery = () => {
   const refEditor = useRef()
 
   return (
-    <main
-      css={css`
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        padding: 64px;
-
-        .editor-wrap {
+    <>
+      <div
+        css={css`
           max-width: 1000px;
           width: 100%;
-        }
-
-        .vert-space {
-          display: block;
-          height: 24px;
-        }
-      `}
-    >
-      <div className='editor-wrap'>
+        `}
+      >
         <CodeEditor
           id='config'
           ref={refEditor}
@@ -64,7 +52,7 @@ const NewQuery = () => {
       {typeof savedId === 'number' && (
         <Redirect to={`/query/${savedId}`} />
       )}
-    </main>
+    </>
   )
 }
 
