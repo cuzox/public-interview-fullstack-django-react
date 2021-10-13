@@ -5,7 +5,7 @@ import Button from 'components/Button'
 import InputText from 'components/InputText'
 import useApi from 'hooks/useApi'
 
-const LoggedOut = () => {
+const LoggedOut = ({ onLogin = () => {} }) => {
   const refEmail = useRef(null)
   const refPassword = useRef(null)
   const api = useApi()
@@ -17,7 +17,9 @@ const LoggedOut = () => {
         email: refEmail.current.value,
         password: refPassword.current.value,
       })
-      console.log(loginResult)
+      if (loginResult.authed) {
+        onLogin(loginResult.user)
+      }
     },
     [api, refEmail, refPassword]
   )

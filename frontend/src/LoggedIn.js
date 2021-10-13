@@ -1,4 +1,4 @@
-const LoggedIn = () => (
+const LoggedIn = ({ userInfo = {}, onLogout = () => {} }) => (
   <div>tbd</div>
 )
 

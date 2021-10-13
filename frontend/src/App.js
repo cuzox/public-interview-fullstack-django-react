@@ -6,25 +6,40 @@ import useApi from 'hooks/useApi'
 
 const App = () => {
   const [userState, setUserState] = useState('pending')
+  const [userInfo, setUserInfo] = useState({})
   const api = useApi()
   
   useEffect(() => {
     const fetchBoostrap = async () => {
       const bootstrap = await api.get('/bootstrap')
       if (bootstrap.authed) {
-        // todo
-        return
-      } else {
-        return setUserState('guest')
+        setUserInfo(bootstrap.user)
+        return setUserState('authed')
       }
+      setUserState('guest')
     }
     fetchBoostrap()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
-      {userState === 'guest' && (<LoggedOut />)}
-      {userState === 'authed' && (<LoggedIn />)}
+      {userState === 'guest' && (
+        <LoggedOut
+          onLogin={(newUserInfo) => {
+            setUserInfo(newUserInfo)
+            setUserState('authed')
+          }}
+        />
+      )}
+      {userState === 'authed' && (
+        <LoggedIn
+          userInfo={userInfo}
+          onLogout={() => {
+            setUserState('guest')
+            setUserInfo({})
+          }}
+        />
+      )}
     </>
   )
 }
