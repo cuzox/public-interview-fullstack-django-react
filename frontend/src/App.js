@@ -4,9 +4,15 @@ import { useEffect, useMemo, useState } from 'react'
 import LoggedIn from './LoggedIn'
 import LoggedOut from './LoggedOut'
 import { createBrowserHistory } from 'history'
+import { monaco } from 'react-monaco-editor'
+import monacoDevtoolsTheme from 'monaco-themes/themes/Chrome DevTools.json'
 import useApi from 'hooks/useApi'
 
 const history = createBrowserHistory()
+
+delete monacoDevtoolsTheme.colors['editor.lineHighlightBackground']
+
+monaco.editor.defineTheme('devtools', monacoDevtoolsTheme)
 
 const LogoutView = ({ onLogout = () => {} }) => {
   const [pending, setPending] = useState(true)
