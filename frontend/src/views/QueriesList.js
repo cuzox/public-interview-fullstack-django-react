@@ -25,6 +25,7 @@ const QueriesList = () => {
       data={list}
       mapping={[
         ['ID', (row) => row.id],
+        ['Title', (row) => row.name],
         ['Author', (row) => row.user_name],
         [null, (row) => (
           <Link to={`/query/${row.id}`}>

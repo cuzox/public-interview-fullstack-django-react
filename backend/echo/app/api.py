@@ -84,21 +84,24 @@ def logout(request):
 def query(request, pk=None):
     if request.method == 'POST':
         data = _body_json(request, default={})
+        name = data.get('name')
         content = data.get('content')
         user = request.user
 
-        record = models.SavedQueries.objects.create(content=content, user=user)
+        record = models.SavedQueries.objects.create(user=user, name=name, content=content)
         return Response({
             'id': record.id,
         })
     
     if request.method == 'PUT':
         data = _body_json(request, default={})
+        name = data.get('name')
         content = data.get('content')
         user = request.user
 
         try:
             record = models.SavedQueries.objects.get(pk=pk)
+            record.name = name
             record.content = content
             record.save()
         except:
@@ -116,6 +119,7 @@ def query(request, pk=None):
 
         return Response({
             'id': record.id,
+            'name': record.name,
             'content': record.content,
         })
 
@@ -129,7 +133,7 @@ def queries(request):
             F('user__last_name'),
             output_field=CharField()
         )
-    ).values('id', 'user_id', 'user_name').all()
+    ).values('id', 'name', 'user_id', 'user_name').all()
     return Response({
         'queries': list(results),
     })

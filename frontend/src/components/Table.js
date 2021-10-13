@@ -35,6 +35,7 @@ const Table = ({ data = [], mapping = {} }) => {
         
         th, td {
           font-size: 16px;
+          text-align: center;
         }
 
         th {

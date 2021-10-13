@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 
 import Button from 'components/Button'
 import CodeEditor from 'components/CodeEditor'
+import InputText from 'components/InputText'
 import { Redirect } from 'react-router-dom'
 import { css } from '@emotion/react'
 import useApi from 'hooks/useApi'
@@ -10,6 +11,7 @@ const NewQuery = () => {
   const [savedId, setSavedId] = useState(null)
   const api = useApi()
   const refEditor = useRef()
+  const refName = useRef()
 
   return (
     <>
@@ -19,6 +21,13 @@ const NewQuery = () => {
           width: 100%;
         `}
       >
+        <InputText
+          ref={refName}
+          placeholder='Query title'
+        />
+
+        <span className='vert-space' />
+
         <CodeEditor
           id='config'
           ref={refEditor}
@@ -38,6 +47,7 @@ const NewQuery = () => {
             onClick={async (event) => {
               event.preventDefault()
               const res = await api.post('/query', {
+                name: refName.current.value,
                 content: refEditor.current.value,
               })
               alert('query saved')

@@ -19,3 +19,4 @@ class SavedQueries(TimeStampedModel):
         EchoUser, on_delete=django.db.models.CASCADE, null=False
     )
     content = django.db.models.TextField(null=False)
+    name = django.db.models.CharField(null=False, max_length=100)
