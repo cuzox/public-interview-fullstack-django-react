@@ -1,12 +1,13 @@
 import { Route, Switch } from 'react-router-dom'
 
 import ExistingQuery from 'views/ExistingQuery'
-import QueriesList from 'views/QueriesList'
+import { Link } from 'react-router-dom'
 import Logotype from 'components/Logotype'
 import NewQuery from 'views/NewQuery'
+import QueriesList from 'views/QueriesList'
 import { css } from '@emotion/react'
 
-const LoggedIn = ({ userInfo = {}, onLogout = () => {} }) => (
+const LoggedIn = ({ userInfo = {} }) => (
   <div
     css={css`
       display: flex;
@@ -16,6 +17,11 @@ const LoggedIn = ({ userInfo = {}, onLogout = () => {} }) => (
       .vert-space {
         display: block;
         height: 24px;
+      }
+
+      .horiz-space {
+        display: inline-block;
+        width: 24px;
       }
     `}
   >
@@ -27,11 +33,27 @@ const LoggedIn = ({ userInfo = {}, onLogout = () => {} }) => (
         padding: 12px 64px;
       `}
     >
-      <a href='/'>
+      <Link to='/'>
         <Logotype height='24px' />
-      </a>
+      </Link>
 
-      <a href='/logout'>Logout</a>
+      <section>
+        <span>
+          Logged in as
+          {' '}
+          <span
+            css={css`
+              font-weight: 600;
+            `}
+          >
+            {userInfo.name}
+          </span>
+        </span>
+
+        <span className='horiz-space' />
+
+        <Link to='/logout'>Logout</Link>
+      </section>
     </header>
 
     <main
