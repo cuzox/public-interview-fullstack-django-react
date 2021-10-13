@@ -20,7 +20,7 @@ def bootstrap(request):
     Fetched by the frontend as the SPA spins up
     Used to determine frontend state
     """
-    if request.auth is not None:
+    if request.user and request.user.is_authenticated:
         user = request.user
         return Response({
             'authed': True,

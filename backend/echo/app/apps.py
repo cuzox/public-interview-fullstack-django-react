@@ -14,6 +14,7 @@ class AppConfig(AppConfig):
       from . import models
 
       # init db records
+      logger.info('READY')
       exists = models.EchoUser.objects.exists()
       if not exists:
          user = models.EchoUser.objects.create(first_name='foo', email='foo@anomalo.com')

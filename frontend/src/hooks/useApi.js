@@ -29,6 +29,7 @@ function makeRequest({
 }) {
   const requestConfig = {
     method,
+    credentials: 'include',
   }
 
   const usingFormData = methodUsingFormData.includes(method)
