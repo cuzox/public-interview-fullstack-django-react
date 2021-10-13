@@ -1,14 +1,26 @@
 import { Global, css } from '@emotion/react'
+import { useCallback, useRef } from 'react'
 
 import Button from 'components/Button'
 import InputText from 'components/InputText'
 import useApi from 'hooks/useApi'
-import { useRef } from 'react'
 
 const LoggedOut = () => {
   const refEmail = useRef(null)
   const refPassword = useRef(null)
   const api = useApi()
+
+  const onSubmit = useCallback(
+    async (event) => {
+      event.preventDefault()
+      const loginResult = await api.post('/login', {
+        email: refEmail.current.value,
+        password: refPassword.current.value,
+      })
+      console.log(loginResult)
+    },
+    [api, refEmail, refPassword]
+  )
 
   return (
     <div
@@ -47,7 +59,17 @@ const LoggedOut = () => {
         <span className='vert-space' />
 
         <label>Password</label>
-        <InputText ref={refPassword} type='password' />
+        <InputText
+          ref={refPassword}
+          type='password'
+          onKeyPress={(event) => {
+            if (event.key !== 'Enter') {
+              return
+            }
+            event.preventDefault()
+            onSubmit()
+          }}
+        />
 
         <span className='vert-space' />
 
@@ -57,16 +79,7 @@ const LoggedOut = () => {
             flex-direction: row-reverse;
           `}
         >
-          <Button
-            onClick={async (event) => {
-              event.preventDefault()
-              const loginResult = await api.post('/login', {
-                email: refEmail.current.value,
-                password: refPassword.current.value,
-              })
-              console.log(loginResult)
-            }}
-          >
+          <Button onClick={onSubmit}>
             Login
           </Button>
         </nav>
