@@ -60,7 +60,7 @@ const LoggedOut = () => {
           <Button
             onClick={async (event) => {
               event.preventDefault()
-              const loginResult = await api.patch('/login', {
+              const loginResult = await api.post('/login', {
                 email: refEmail.current.value,
                 password: refPassword.current.value,
               })

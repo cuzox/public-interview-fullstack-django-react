@@ -20,7 +20,7 @@ def bootstrap(request):
     Fetched by the frontend as the SPA spins up
     Used to determine frontend state
     """
-    if request.user and request.user.is_authenticated:
+    if request.auth is not None:
         user = request.user
         return Response({
             'authed': True,
@@ -35,7 +35,7 @@ def bootstrap(request):
     })
 
 @csrf_exempt
-@api_view(['PATCH'])
+@api_view(['POST'])
 def login(request):
     data = _body_json(request, default={})
     email = data.get('email')

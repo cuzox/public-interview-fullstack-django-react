@@ -52,7 +52,7 @@ function makeRequest({
     (response) => response.json(),
   )
 
-  url = `//localhost:8000/${url.replace(/^\//, '')}`
+  url = '/' + url.replace(/^\//, '')
 
   let result = fetch(url, requestConfig)
   while (middlewareApplied.length) {

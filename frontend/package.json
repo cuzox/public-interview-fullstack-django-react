@@ -2,6 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:8000",
   "dependencies": {
     "@emotion/babel-preset-css-prop": "^11.0.0",
     "@emotion/react": "^11.4.1",
