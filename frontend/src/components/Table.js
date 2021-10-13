@@ -68,7 +68,7 @@ const Table = ({ data = [], mapping = {} }) => {
           border-right: none;
         }
         
-        tbody tr:nth-child(n+2) td {
+        tbody tr:nth-child(2n) td {
           background: ${colors.GRAY_1};
         }
       `}
