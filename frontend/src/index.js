@@ -23,6 +23,11 @@ ReactDOM.render(
         code {
           font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
         }
+
+        a {
+          text-decoration: none;
+          color: ${colors.INTERACTIVE};
+        }
       `}
     />
   </React.StrictMode>,

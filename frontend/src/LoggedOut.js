@@ -3,6 +3,7 @@ import { useCallback, useRef } from 'react'
 
 import Button from 'components/Button'
 import InputText from 'components/InputText'
+import Logotype from 'components/Logotype'
 import useApi from 'hooks/useApi'
 
 const LoggedOut = ({ onLogin = () => {} }) => {
@@ -29,12 +30,23 @@ const LoggedOut = ({ onLogin = () => {} }) => {
       css={css`
         align-items: center;
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         height: 100%;
         justify-content: center;
         width: 100%;
+
+        .vert-space {
+          display: block;
+          height: 24px;
+        }
       `}
     >
+      <Logotype width='100px' />
+
+      <span className='vert-space' />
+      <span className='vert-space' />
+      <span className='vert-space' />
+
       <main
         css={css`
           background: #fff;
@@ -47,11 +59,6 @@ const LoggedOut = ({ onLogin = () => {} }) => {
             display: block;
             font-weight: 600;
             margin-bottom: 6px;
-          }
-
-          .vert-space {
-            display: block;
-            height: 24px;
           }
         `}
       >
