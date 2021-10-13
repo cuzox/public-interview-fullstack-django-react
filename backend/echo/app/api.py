@@ -45,7 +45,6 @@ def login(request):
     if user is None:
         return Response({
             'authed': False,
-            'email': email,
         })
 
     django.contrib.auth.login(request, user)
@@ -55,4 +54,12 @@ def login(request):
             'email': user.email,
             'name': "{} {}".format(user.first_name, user.last_name),
         }
+    })
+
+@csrf_exempt
+@api_view(['POST'])
+def logout(request):
+    django.contrib.auth.logout(request)
+    return Response({
+        'authed': False,
     })

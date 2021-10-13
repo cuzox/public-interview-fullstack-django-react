@@ -68,8 +68,7 @@ const LoggedOut = ({ onLogin = () => {} }) => {
             if (event.key !== 'Enter') {
               return
             }
-            event.preventDefault()
-            onSubmit()
+            onSubmit(event)
           }}
         />
 
