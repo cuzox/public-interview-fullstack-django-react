@@ -1,6 +1,7 @@
 import { Route, Switch } from 'react-router-dom'
 
 import ExistingQuery from 'views/ExistingQuery'
+import QueriesList from 'views/QueriesList'
 import Logotype from 'components/Logotype'
 import NewQuery from 'views/NewQuery'
 import { css } from '@emotion/react'
@@ -38,7 +39,7 @@ const LoggedIn = ({ userInfo = {}, onLogout = () => {} }) => (
       </Route>
 
       <Route>
-        <div>tbd</div>
+        <QueriesList />
       </Route>
     </Switch>
   </div>

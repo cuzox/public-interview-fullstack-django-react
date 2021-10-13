@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import Button from 'components/Button'
 import CodeEditor from 'components/CodeEditor'
@@ -12,7 +12,7 @@ const NewQuery = () => {
   const refEditor = useRef()
   const { pk } = useParams()
 
-  useMemo(() => {
+  useEffect(() => {
     const fetchContent = async () => {
       const res = await api.get(`/query/${pk}`)
       setInitialContent(res.content)

@@ -3,6 +3,8 @@ import json
 
 import django.contrib.auth
 from django.contrib.auth.decorators import login_required
+from django.db.models import F, Value, CharField
+from django.db.models.functions import Concat
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -116,3 +118,19 @@ def query(request, pk=None):
             'id': record.id,
             'content': record.content,
         })
+
+@login_required
+@api_view(['GET'])
+def queries(request):
+    ids = models.SavedQueries.objects.annotate(
+        user_name=Concat(
+            F('user__first_name'),
+            Value(' '),
+            F('user__last_name'),
+            output_field=CharField()
+        )
+    ).values('id', 'user_id', 'user_name').all()
+    ids = list(ids)
+    return Response({
+        'ids': ids,
+    })

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Redirect } from 'react-router-dom'
 import useApi from 'hooks/useApi'
@@ -7,7 +7,7 @@ const Logout = ({ onLogout = () => {} }) => {
   const [pending, setPending] = useState(true)
   const api = useApi()
 
-  useMemo(() => {
+  useEffect(() => {
     if (!pending) {
       return
     }
