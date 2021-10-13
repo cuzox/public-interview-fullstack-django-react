@@ -9,5 +9,5 @@ node_modules
 .DS_Store
 
 # generated dirs & files
-./data
+backend/database
 db.sqlite3

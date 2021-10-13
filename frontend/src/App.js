@@ -1,8 +1,9 @@
-import { Redirect, Route, Router, Switch } from 'react-router-dom'
-import { useEffect, useMemo, useState } from 'react'
+import { Route, Router, Switch } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 
-import LoggedIn from './LoggedIn'
-import LoggedOut from './LoggedOut'
+import LoggedIn from 'views/LoggedIn'
+import LoggedOut from 'views/LoggedOut'
+import Logout from 'views/Logout'
 import { createBrowserHistory } from 'history'
 import { monaco } from 'react-monaco-editor'
 import monacoDevtoolsTheme from 'monaco-themes/themes/Chrome DevTools.json'
@@ -13,26 +14,6 @@ const history = createBrowserHistory()
 delete monacoDevtoolsTheme.colors['editor.lineHighlightBackground']
 
 monaco.editor.defineTheme('devtools', monacoDevtoolsTheme)
-
-const LogoutView = ({ onLogout = () => {} }) => {
-  const [pending, setPending] = useState(true)
-  const api = useApi()
-
-  useMemo(() => {
-    if (!pending) {
-      return
-    }
-
-    const triggerLogout = async () => {
-      await api.post('/logout')
-      onLogout()
-      setPending(false)
-    }
-    triggerLogout()
-  }, [pending, setPending])
-
-  return !pending && <Redirect to='/' />
-}
 
 const App = () => {
   const [userState, setUserState] = useState('pending')
@@ -55,7 +36,7 @@ const App = () => {
     <Router history={history}>
       <Switch>
         <Route path='/logout'>
-          <LogoutView
+          <Logout
             onLogout={() => {
               setUserState('guest')
               setUserInfo({})

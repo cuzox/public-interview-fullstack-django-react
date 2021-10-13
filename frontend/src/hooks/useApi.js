@@ -2,7 +2,7 @@ import Cookies from 'js-cookie'
 import { useMemo } from 'react'
 
 const csrfTokenCookieName = 'csrftoken'
-const methodUsingFormData = ['put', 'post', 'patch']
+const methodUsingFormData = ['post', 'put', 'patch']
 
 /*
   The `useApi` hook returns API verb functions, which take api paths, and
@@ -17,7 +17,7 @@ const methodUsingFormData = ['put', 'post', 'patch']
   as either `request.body` or URL params (whichever is appropriate)
 
   ```
-  const data = await api.patch('/account', { name: 'kona' })
+  const data = await api.patch('/account', { name: 'value' })
   ```
 */
 
@@ -65,7 +65,7 @@ function makeRequest({
 
 export default function useApi() {
   return useMemo(() => {
-    return ['get', 'put', 'patch', 'post', 'delete', 'head', 'options'].reduce((mapping, verb) => {
+    return ['get', 'post', 'put', 'patch', 'delete', 'head', 'options'].reduce((mapping, verb) => {
       mapping[verb] = (url, data, middleware) => makeRequest({
         url,
         data,

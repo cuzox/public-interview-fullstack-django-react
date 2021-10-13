@@ -3,7 +3,6 @@ version: '3.8'
 services:
   backend:
     build: .
-    command: python ./echo/manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/usr/src/backend/
     ports:
@@ -15,12 +14,9 @@ services:
   db:
     image: postgres:13.0-alpine
     volumes:
-      - sql_data:/var/lib/postgresql/data/
+      - ./database:/var/lib/postgresql/data/
     environment:
       - POSTGRES_DB=echo
       - POSTGRES_USER=echo_user
       - POSTGRES_PASSWORD=echo_password
-
-volumes:
-  sql_data:
   
