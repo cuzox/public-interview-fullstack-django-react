@@ -9,6 +9,7 @@ done
 echo "PostgreSQL started"
 
 python ./echo/manage.py flush --no-input
-python ./echo/manage.py migrate
+python ./echo/manage.py migrate sessions
+python ./echo/manage.py migrate app
 
 exec "$@"

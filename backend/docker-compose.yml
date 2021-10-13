@@ -15,12 +15,12 @@ services:
   db:
     image: postgres:13.0-alpine
     volumes:
-      - psql_data:/var/lib/postgresql/data/
+      - sql_data:/var/lib/postgresql/data/
     environment:
       - POSTGRES_DB=echo
       - POSTGRES_USER=echo_user
       - POSTGRES_PASSWORD=echo_password
 
 volumes:
-  psql_data:
+  sql_data:
   

@@ -2,7 +2,7 @@ import Cookies from 'js-cookie'
 import { useMemo } from 'react'
 
 const csrfTokenCookieName = 'csrftoken'
-const methodUsingFormData = ['PUT', 'POST', 'PATCH']
+const methodUsingFormData = ['put', 'post', 'patch']
 
 /*
   The `useApi` hook returns API verb functions, which take api paths, and
