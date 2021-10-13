@@ -3,7 +3,9 @@ import { useRef, useState } from 'react'
 import Button from 'components/Button'
 import CodeEditor from 'components/CodeEditor'
 import InputText from 'components/InputText'
+import { Link } from 'react-router-dom'
 import { Redirect } from 'react-router-dom'
+import colors from 'constants/colors'
 import { css } from '@emotion/react'
 import useApi from 'hooks/useApi'
 
@@ -40,9 +42,16 @@ const NewQuery = () => {
         <nav
           css={css`
             display: flex;
-            flex-direction: row-reverse;
+            flex-direction: row;
+            justify-content: space-between;
+
+            a {
+              color: ${colors.GRAY_8};
+            }
           `}
         >
+          <Link to='/'>Back</Link>
+
           <Button
             onClick={async (event) => {
               event.preventDefault()
