@@ -10,19 +10,19 @@ const Button = ({
 }) => (
   <button
     css={css`
-      background: #fff;
-      border: 2px solid ${colors.INTERACTIVE};
+      background: ${colors.INTERACTIVE};
+      border: none;
       border-radius: 6px;
+      color: #fff;
+      cursor: pointer;
       font-size: 16px;
       font-weight: bold;
       height: 30px;
       padding: 0 16px;
-      transition: background 0.4s ease-out, color 0.4s ease-out;
+      transition: box-shadow 0.4s ease-out;
 
       &:hover {
-        color: #fff;
-        cursor: pointer;
-        background: ${colors.INTERACTIVE};
+        box-shadow: 0 0 6px 4px rgba(0, 0, 0, 0.24);
       }
     `}
     onClick={onClick}

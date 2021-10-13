@@ -28,7 +28,6 @@ const LoggedIn = ({ userInfo = {}, onLogout = () => {} }) => (
         display: flex;
         flex-direction: column;
         padding: 64px;
-        width: 100%;
 
         .editor-wrap {
           max-width: 1000px;
