@@ -35,7 +35,7 @@ const Table = ({ data = [], mapping = {} }) => {
         
         th, td {
           font-size: 16px;
-          text-align: center;
+          text-align: center; 
         }
 
         th {
@@ -44,6 +44,7 @@ const Table = ({ data = [], mapping = {} }) => {
         }
 
         td {
+          background: #fff;
           border: 1px solid ${colors.GRAY_6};
           padding: 6px 8px;
         }
@@ -65,6 +66,10 @@ const Table = ({ data = [], mapping = {} }) => {
         }
         tbody tr td:not(:last-child) {
           border-right: none;
+        }
+        
+        tbody tr:nth-child(n+2) td {
+          background: ${colors.GRAY_1};
         }
       `}
     >
