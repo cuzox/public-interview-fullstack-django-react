@@ -30,11 +30,21 @@ const QueriesList = () => {
     >
       <nav
         css={css`
+          align-items: center;
           display: flex;
-          flex-direction: row-reverse;
+          flex-direction: row;
+          justify-content: space-between;
           width: 100%;
+
+          h2 {
+            display: block;
+            font-size: 18px;
+            font-weight: 600;
+          }
         `}
       >
+        <h2>Saved Queries</h2>
+
         <Link to='/query/new'>
           <Button>Add a Query</Button>
         </Link>
