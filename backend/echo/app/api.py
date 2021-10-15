@@ -148,9 +148,30 @@ def execute_query(request, pk):
         return Response({}, status=status.HTTP_404_NOT_FOUND)
     
     content = record.content
+    data = None
+    error = None
+    columns = None
     
     with connections['dvdrental'].cursor() as cursor:
-        result = cursor.execute(content)
-        result = cursor.fetchall()
+        try:
+            result = cursor.execute(content)
+        except Exception as db_err:
+            error = str(db_err)
+        
+        if not error:
+            try:
+                data = cursor.fetchall()
+                data = list(data)
+                columns = [col[0] for col in cursor.description]
+            except Exception as db_err:
+                if str(db_err) == "no results to fetch":
+                    data = []
+                    columns = []
+                else:
+                    raise db_err
 
-    return Response(list(result))
+    return Response({
+        "columns": columns,
+        "data": data,
+        "error": error,
+    })

@@ -17,11 +17,19 @@ const LoggedIn = ({ userInfo = {} }) => (
       .vert-space {
         display: block;
         height: 24px;
+
+        &.half {
+          height: 12px;
+        }
       }
 
       .horiz-space {
         display: inline-block;
         width: 24px;
+
+        &.half {
+          width: 12px;
+        }
       }
     `}
   >
