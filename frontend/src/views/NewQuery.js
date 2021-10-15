@@ -21,6 +21,10 @@ const NewQuery = () => {
         css={css`
           max-width: 1000px;
           width: 100%;
+
+          .editor {
+            height: 320px;
+          }
         `}
       >
         <InputText
@@ -31,7 +35,7 @@ const NewQuery = () => {
         <span className='vert-space' />
 
         <CodeEditor
-          id='config'
+          className='editor'
           ref={refEditor}
           language='sql'
           placeholder='select * from table'

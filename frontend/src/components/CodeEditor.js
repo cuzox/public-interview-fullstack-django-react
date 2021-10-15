@@ -126,12 +126,12 @@ export default class CodeEditor extends Component {
 
   render() {
     const { placeholderShown, focused } = this.state
-    const { defaultValue, placeholder, language } = this.props
+    const { defaultValue, placeholder, language, className } = this.props
 
     return (
       <div
         ref={this.containerRef}
-        className={classnames({ focused, placeholderShown })}
+        className={classnames(className, { focused, placeholderShown })}
         css={css`
           border: 1px solid ${colors.GRAY_6};
           border-radius: 6px;
