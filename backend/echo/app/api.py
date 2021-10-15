@@ -3,6 +3,7 @@ import json
 
 import django.contrib.auth
 from django.contrib.auth.decorators import login_required
+from django.db import connections
 from django.db.models import F, Value, CharField
 from django.db.models.functions import Concat
 from django.views.decorators.csrf import csrf_exempt
@@ -137,3 +138,19 @@ def queries(request):
     return Response({
         'queries': list(results),
     })
+
+@login_required
+@api_view(['GET'])
+def execute_query(request, pk):
+    try:
+        record = models.SavedQueries.objects.get(pk=pk)
+    except:
+        return Response({}, status=status.HTTP_404_NOT_FOUND)
+    
+    content = record.content
+    
+    with connections['dvdrental'].cursor() as cursor:
+        result = cursor.execute(content)
+        result = cursor.fetchall()
+
+    return Response(list(result))

@@ -91,6 +91,14 @@ DATABASES = {
         "PASSWORD": os.environ.get("DB_PASSWORD", "password"),
         "HOST": os.environ.get("DB_HOST", "localhost"),
         "PORT": os.environ.get("DB_PORT", "5432"),
+    },
+    "dvdrental": {
+        "ENGINE": os.environ.get("DB_ENGINE", "django.db.backends.sqlite3"),
+        "NAME": os.environ.get("DB_MOCK_DATA_DATABASE", BASE_DIR / "db.sqlite3"),
+        "USER": os.environ.get("DB_MOCK_DATA_USER", "user"),
+        "PASSWORD": os.environ.get("DB_MOCK_DATA_PASSWORD", "password"),
+        "HOST": os.environ.get("DB_HOST", "localhost"),
+        "PORT": os.environ.get("DB_PORT", "5432"),
     }
 }
 

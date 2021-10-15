@@ -9,5 +9,6 @@ urlpatterns = [
     path('logout', api.logout),
     path('query', api.query),
     path('query/<int:pk>', api.query),
+    path('query/<int:pk>/execute', api.execute_query),
     path('queries', api.queries),
 ]
