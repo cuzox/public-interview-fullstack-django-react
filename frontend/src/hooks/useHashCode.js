@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
   which can be useful for generating react keys
   base on input strings, that may or may not change
 
-  const [hashCode, setHashCodeString] = useHashCode()
+  const [hashCode, inputString, setHashCodeString] = useHashCode()
 */
 
 function useHashCode(initialString = '') {
@@ -28,7 +28,7 @@ function useHashCode(initialString = '') {
     setHash(newHash)
   }, [str, setHash])
   
-  return [hash, setStr]
+  return [hash, str, setStr]
 }
 
 export default useHashCode

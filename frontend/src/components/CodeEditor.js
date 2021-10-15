@@ -61,6 +61,20 @@ export default class CodeEditor extends Component {
     event.stopPropagation()
   }
 
+  onMonacoKeyUp = (event) => {
+    const { focused } = this.state
+    if (!focused) {
+      return
+    }
+
+    const { onKeyUp } = this.props
+    if (!onKeyUp) {
+      return
+    }
+
+    onKeyUp(event)
+  }
+
   onMonacoFocus = () => {
     const { placeholderShown } = this.state
 
@@ -113,6 +127,7 @@ export default class CodeEditor extends Component {
 
   componentDidMount() {
     document.addEventListener('keydown', this.onMonacoKeyDown, true)
+    document.addEventListener('keyup', this.onMonacoKeyUp, true)
     this.registerMonacoEvents()
   }
 
@@ -122,6 +137,7 @@ export default class CodeEditor extends Component {
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.onMonacoKeyDown, true)
+    document.removeEventListener('keyup', this.onMonacoKeyUp, true)
   }
 
   render() {

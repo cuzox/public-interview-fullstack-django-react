@@ -58,6 +58,7 @@ def bootstrap(request):
         return Response({
             'authed': True,
             'user': {
+                'id': user.id,
                 'email': user.email,
                 'name': "{} {}".format(user.first_name, user.last_name),
             }
@@ -85,6 +86,7 @@ def login(request):
     return Response({
         'authed': True,
         'user': {
+            'id': user.id,
             'email': user.email,
             'name': "{} {}".format(user.first_name, user.last_name),
         }
@@ -122,6 +124,10 @@ def query(request, pk=None):
 
         try:
             record = models.SavedQueries.objects.get(pk=pk)
+
+            if record.user_id != request.user.id:
+                raise Exception("Not permitted")
+
             record.name = name
             record.content = content
             record.save()
@@ -142,6 +148,7 @@ def query(request, pk=None):
             'id': record.id,
             'name': record.name,
             'content': record.content,
+            'author_id': record.user_id,
         })
 
 
@@ -163,13 +170,20 @@ def queries(request):
 
 @login_required
 @api_view(['GET'])
-def execute_query(request, pk, filetype=None, ):
-    try:
-        record = models.SavedQueries.objects.get(pk=pk)
-    except:
-        return Response({}, status=status.HTTP_404_NOT_FOUND)
-    
-    content = record.content
+def execute_query(request, pk=None, filetype=None):
+    if pk is not None:
+        try:
+            record = models.SavedQueries.objects.get(pk=pk)
+        except:
+            return Response({}, status=status.HTTP_404_NOT_FOUND)
+        content = record.content
+    else:
+        # without PK then we assume this is an ad hoc run
+        # so if the content of the query is missing, return a 404
+        content = request.GET.get('content')
+        if not content:
+            return Response({}, status=status.HTTP_404_NOT_FOUND)
+
     data = None
     error = None
     columns = None
@@ -228,13 +242,21 @@ def execute_query(request, pk, filetype=None, ):
 
 @login_required
 @api_view(['GET'])
-def explain_query(request, pk):
-    try:
-        record = models.SavedQueries.objects.get(pk=pk)
-    except:
-        return Response({}, status=status.HTTP_404_NOT_FOUND)
-    
-    content = "explain analyze {}".format(record.content)
+def explain_query(request, pk=None):
+    if pk is not None:
+        try:
+            record = models.SavedQueries.objects.get(pk=pk)
+        except:
+            return Response({}, status=status.HTTP_404_NOT_FOUND)
+        content = record.content
+    else:
+        # without PK then we assume this is an ad hoc run
+        # so if the content of the query is missing, return a 404
+        content = request.GET.get('content')
+        if not content:
+            return Response({}, status=status.HTTP_404_NOT_FOUND)
+
+    content = "explain analyze {}".format(content)
     explanation = None
     error = None
 

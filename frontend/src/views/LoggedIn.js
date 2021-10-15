@@ -83,7 +83,7 @@ const LoggedIn = ({ userInfo = {} }) => (
         </Route>
 
         <Route path='/query/:pk' exact>
-          <ExistingQuery />
+          <ExistingQuery userInfo={userInfo} />
         </Route>
 
         <Route path='/' exact>
