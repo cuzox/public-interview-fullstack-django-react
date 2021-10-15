@@ -14,9 +14,11 @@ services:
   db:
     image: postgres:13.0-alpine
     volumes:
+      - ./mock_data.sql:/docker-entrypoint-initdb.d/init.sql
       - ./database:/var/lib/postgresql/data/
+    ports:
+      - 5555:5432
     environment:
       - POSTGRES_DB=echo
       - POSTGRES_USER=echo_user
       - POSTGRES_PASSWORD=echo_password
-  
