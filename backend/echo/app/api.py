@@ -163,7 +163,7 @@ def queries(request):
 
 @login_required
 @api_view(['GET'])
-def execute_query(request, pk, filetype=None):
+def execute_query(request, pk, filetype=None, ):
     try:
         record = models.SavedQueries.objects.get(pk=pk)
     except:
@@ -222,5 +222,41 @@ def execute_query(request, pk, filetype=None):
     return Response({
         "columns": columns,
         "data": data,
+        "error": error,
+    })
+
+
+@login_required
+@api_view(['GET'])
+def explain_query(request, pk):
+    try:
+        record = models.SavedQueries.objects.get(pk=pk)
+    except:
+        return Response({}, status=status.HTTP_404_NOT_FOUND)
+    
+    content = "explain analyze {}".format(record.content)
+    explanation = None
+    error = None
+
+    with connections['dvdrental'].cursor() as cursor:
+        try:
+            cursor.execute(content)
+        except Exception as db_err:
+            error = str(db_err)
+        
+        if not error:
+            try:
+                explanation = cursor.fetchall()
+                explanation = [lines[0] for lines in explanation]
+                explanation = "\n".join(explanation)
+            except Exception as db_err:
+                if str(db_err) == "no results to fetch":
+                    explanation = []
+
+                else:
+                    raise db_err
+    
+    return Response({
+        "explanation": explanation,
         "error": error,
     })

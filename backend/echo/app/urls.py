@@ -11,5 +11,6 @@ urlpatterns = [
     path('query/<int:pk>', api.query),
     path('query/<int:pk>/execute', api.execute_query),
     path('query/<int:pk>/execute/<str:filetype>', api.execute_query),
+    path('query/<int:pk>/explain', api.explain_query),
     path('queries', api.queries),
 ]

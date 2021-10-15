@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import Button from 'components/Button'
 import CodeEditor from 'components/CodeEditor'
+import InputCheckbox from 'components/InputCheckbox'
 import InputText from 'components/InputText'
 import { Link } from 'react-router-dom'
 import Table from 'components/Table'
@@ -10,29 +11,38 @@ import { css } from '@emotion/react'
 import useApi from 'hooks/useApi'
 import { useParams } from 'react-router-dom'
 
-const QueryResults = ({ pk, name }) => {
+const QueryResults = ({ pk }) => {
   const [status, setStatus] = useState('pending')
   const [results, setResults] = useState(null)
+  const [explanationResult, setExplanationResult] = useState(null)
+  const [explaining, setExplaining] = useState(false)
+  const refExplain = useRef(null)
   const api = useApi()
 
   useEffect(() => {
     const fetchResults = async () => {
-      let res
-      try {
-        res = await api.get(`/query/${pk}/execute`)
-      } catch (err) {
-        // todo: handle error, display somehow
-        console.error(err)
-        return
-      }
-
+      setStatus('pending')
+      const res = await api.get(`/query/${pk}/execute`)
       setResults(res)
       setStatus('ready')
     }
-    fetchResults()
-  }, [])
 
-  const { data, columns, error } = results || {}
+    const fetchExplanation = async () => {
+      setStatus('pending')
+      const res = await api.get(`/query/${pk}/explain`)
+      setExplanationResult(res)
+      setStatus('ready')
+    }
+
+    if (explaining) {
+      fetchExplanation()
+    } else {
+      fetchResults()
+    }
+  }, [pk, api, setResults, setStatus, setExplanationResult, explaining])
+
+  const resultsApplied = explaining ? explanationResult : results
+  const { explanation, data, columns, error } = resultsApplied || {}
   const haveError = !!error
   const haveData = Array.isArray(data) && data.length > 0
 
@@ -77,7 +87,51 @@ const QueryResults = ({ pk, name }) => {
       `}
     >
       <header>
-        <h2>Query Results</h2>
+        <span
+          css={css`
+            align-items: center;
+            display: flex;
+            flex-direction: row;
+          `}
+        >
+          <h2>Query Results</h2>
+
+          {status === 'ready' && !haveError && (
+            <>
+              <span className='horiz-space' />
+
+              <span
+                css={css`
+                  align-items: center;
+                  display: flex;
+                  flex-direction: row;
+                  font-size: 12px;
+
+                  label {
+                    cursor: pointer;
+                    margin-left: 6px;
+                  }
+                `}
+              >
+                <InputCheckbox
+                  ref={refExplain}
+                  defaultChecked={explaining}
+                  onChange={() => {
+                    setExplaining(refExplain.current.checked)
+                  }}
+                />
+                <label
+                  onClick={() => {
+                    refExplain.current.checked = !refExplain.current.checked
+                    setExplaining(refExplain.current.checked)
+                  }}
+                >
+                  explain
+                </label>
+              </span>
+            </>
+          )}
+        </span>
 
         {status === 'ready' && !haveError && haveData && (
           <a
@@ -107,11 +161,23 @@ const QueryResults = ({ pk, name }) => {
         </>
       )}
 
-      {status === 'ready' && !haveError && !haveData && (
+      {status === 'ready' && !haveError && explaining && (
+        <>
+          <h3>Query plan</h3>
+          <span className='vert-space half' />
+          <pre>
+            <code>
+              {explanation}
+            </code>
+          </pre>
+        </>
+      )}
+
+      {status === 'ready' && !haveError && !explaining && !haveData && (
         <span className='status-explained'>zero rows were returned</span>
       )}
       
-      {status === 'ready' && !haveError && haveData && (
+      {status === 'ready' && !haveError && !explaining && haveData && (
         <Table
           data={data}
           mapping={columns.map(((key, index) => [key, (row) => row[index]]))}
@@ -192,7 +258,7 @@ const NewQuery = () => {
 
       <span className='vert-space' />
 
-      <QueryResults pk={pk} name={initialName} />
+      <QueryResults pk={pk} />
     </div>
   )
 }
