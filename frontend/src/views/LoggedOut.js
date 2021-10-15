@@ -4,6 +4,7 @@ import { useCallback, useRef } from 'react'
 import Button from 'components/Button'
 import InputText from 'components/InputText'
 import Logotype from 'components/Logotype'
+import colors from 'constants/colors'
 import useApi from 'hooks/useApi'
 
 const LoggedOut = ({ onLogin = () => {} }) => {
@@ -50,8 +51,9 @@ const LoggedOut = ({ onLogin = () => {} }) => {
       <main
         css={css`
           background: #fff;
+          border: 1px solid ${colors.GRAY_5};
           border-radius: 6px;
-          box-shadow: 0 0 32px 16px rgba(0, 64, 128, 0.28);
+          box-shadow: 0 0 86px 24px rgba(0, 0, 0, 0.16);
           padding: 24px;
           width: 300px;
 
