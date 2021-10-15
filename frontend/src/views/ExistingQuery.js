@@ -9,6 +9,7 @@ import Table from 'components/Table'
 import colors from 'constants/colors'
 import { css } from '@emotion/react'
 import useApi from 'hooks/useApi'
+import useHashCode from 'hooks/useHashCode'
 import { useParams } from 'react-router-dom'
 
 const QueryResults = ({ pk }) => {
@@ -196,6 +197,9 @@ const QueryResults = ({ pk }) => {
 const NewQuery = () => {
   const [initialName, setInitialName] = useState(null)
   const [initialContent, setInitialContent] = useState(null)
+  // current content will reflect whatever content is either
+  // persisted or being executed ad hoc
+  const [contentHashCode, setCurrentContent] = useHashCode()
   const api = useApi()
   const refEditor = useRef()
   const refName = useRef()
@@ -206,6 +210,7 @@ const NewQuery = () => {
       const res = await api.get(`/query/${pk}`)
       setInitialName(res.name)
       setInitialContent(res.content)
+      setCurrentContent(res.content)
     }
     fetchContent()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
@@ -256,6 +261,7 @@ const NewQuery = () => {
               content: refEditor.current.value,
             })
             alert('query updated')
+            setCurrentContent(refEditor.current.value)
           }}
         >
           Update
@@ -264,7 +270,10 @@ const NewQuery = () => {
 
       <span className='vert-space' />
 
-      <QueryResults pk={pk} />
+      <QueryResults
+        pk={pk}
+        key={contentHashCode}
+      />
     </div>
   )
 }
