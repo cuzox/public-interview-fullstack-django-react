@@ -22,7 +22,7 @@ const LoggedOut = ({ onLogin = () => {} }) => {
         onLogin(loginResult.user)
       }
     },
-    [api, refEmail, refPassword]
+    [api, refEmail, refPassword, onLogin]
   )
 
   return (

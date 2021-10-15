@@ -18,7 +18,7 @@ const Logout = ({ onLogout = () => {} }) => {
       setPending(false)
     }
     triggerLogout()
-  }, [pending, setPending])
+  }, [pending, setPending, onLogout, api])
 
   return !pending && <Redirect to='/' />
 }
