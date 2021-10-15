@@ -223,12 +223,15 @@ def execute_query(request, pk=None, filetype=None):
             ]
             content = content + ','.join(treated_row) + '\n'
         response = HttpResponse(content, content_type='text/csv')
-        filename = record.name.strip()
-        filename = re.sub('\s+', '_', filename)
-        filename = re.sub('[^0-9a-zA-Z_]+', '_', filename)
-        filename = re.sub('_+', '_', filename)
-        filename = re.sub('(?:^_)|(?:_$)', '', filename)
-        if filename == "":
+        if pk is not None:
+            filename = record.name.strip()
+            filename = re.sub('\s+', '_', filename)
+            filename = re.sub('[^0-9a-zA-Z_]+', '_', filename)
+            filename = re.sub('_+', '_', filename)
+            filename = re.sub('(?:^_)|(?:_$)', '', filename)
+            if filename == "":
+                filename = "export"
+        else:
             filename = "export"
         response['Content-Disposition'] = "attachment; filename=\"{}.csv\"".format(filename)
         return response
