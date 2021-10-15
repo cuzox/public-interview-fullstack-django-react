@@ -86,7 +86,13 @@ const QueryResults = ({ pk }) => {
         }
       `}
     >
-      <header>
+      <header
+        css={css`
+          a {
+            font-size: 12px;
+          }
+        `}
+      >
         <span
           css={css`
             align-items: center;
