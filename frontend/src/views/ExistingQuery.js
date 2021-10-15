@@ -10,11 +10,10 @@ import { css } from '@emotion/react'
 import useApi from 'hooks/useApi'
 import { useParams } from 'react-router-dom'
 
-const QueryResults = () => {
+const QueryResults = ({ pk, name }) => {
   const [status, setStatus] = useState('pending')
   const [results, setResults] = useState(null)
   const api = useApi()
-  const { pk } = useParams()
 
   useEffect(() => {
     const fetchResults = async () => {
@@ -45,6 +44,13 @@ const QueryResults = () => {
         justify-content: center;
         width: 100%;
 
+        header {
+          align-items: center;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+        }
+
         h2 {
           display: block;
           font-size: 18px;
@@ -70,7 +76,18 @@ const QueryResults = () => {
         }
       `}
     >
-      <h2>Query Results</h2>
+      <header>
+        <h2>Query Results</h2>
+
+        {status === 'ready' && !haveError && haveData && (
+          <a
+            href={`http://localhost:8000/query/${pk}/execute/csv`}
+            download
+          >
+            Download CSV
+          </a>
+        )}
+      </header>
 
       <div className='vert-space' />
 
@@ -175,7 +192,7 @@ const NewQuery = () => {
 
       <span className='vert-space' />
 
-      <QueryResults />
+      <QueryResults pk={pk} name={initialName} />
     </div>
   )
 }

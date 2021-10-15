@@ -1,11 +1,13 @@
-import logging
 import json
+import logging
+import re
 
 import django.contrib.auth
 from django.contrib.auth.decorators import login_required
 from django.db import connections
 from django.db.models import F, Value, CharField
 from django.db.models.functions import Concat
+from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -24,6 +26,24 @@ def _body_json(request, default=None):
         return json.loads(request.data)
     except:
         return default
+
+
+def _treated_csv_cell(cell):
+    """
+    Adds treatment to row cells,
+    in preparation for csv concatenation
+    1. double quotes are converted to double-double quotes
+    2. cells with commas are wrapped in double quotes
+    e.g. `thing` becomes `thing`
+         `th,ing` becomes `"th,ing"`
+         `"thing"` becomes `""thing""`
+         `t"h,i"ng` becomes `"t""h,i""ng"`
+    """
+    result = str(cell)
+    result = result.replace('"', '""')
+    if ',' in result:
+        result = '"' + result + '"'
+    return result
 
 
 @csrf_exempt
@@ -124,6 +144,7 @@ def query(request, pk=None):
             'content': record.content,
         })
 
+
 @login_required
 @api_view(['GET'])
 def queries(request):
@@ -139,9 +160,10 @@ def queries(request):
         'queries': list(results),
     })
 
+
 @login_required
 @api_view(['GET'])
-def execute_query(request, pk):
+def execute_query(request, pk, filetype=None):
     try:
         record = models.SavedQueries.objects.get(pk=pk)
     except:
@@ -154,7 +176,7 @@ def execute_query(request, pk):
     
     with connections['dvdrental'].cursor() as cursor:
         try:
-            result = cursor.execute(content)
+            cursor.execute(content)
         except Exception as db_err:
             error = str(db_err)
         
@@ -169,6 +191,33 @@ def execute_query(request, pk):
                     columns = []
                 else:
                     raise db_err
+    
+    if filetype is not None:
+        if error:
+            raise error
+        
+        if filetype != "csv":
+            return Response({}, status=status.HTTP_404_NOT_FOUND)
+        
+        treated_columns = [
+            _treated_csv_cell(cell) for cell in columns
+        ]
+        content = ','.join(treated_columns) + '\n'
+        for row in data:
+            treated_row = [
+                _treated_csv_cell(cell) for cell in row
+            ]
+            content = content + ','.join(treated_row) + '\n'
+        response = HttpResponse(content, content_type='text/csv')
+        filename = record.name.strip()
+        filename = re.sub('\s+', '_', filename)
+        filename = re.sub('[^0-9a-zA-Z_]+', '_', filename)
+        filename = re.sub('_+', '_', filename)
+        filename = re.sub('(?:^_)|(?:_$)', '', filename)
+        if filename == "":
+            filename = "export"
+        response['Content-Disposition'] = "attachment; filename=\"{}.csv\"".format(filename)
+        return response
 
     return Response({
         "columns": columns,

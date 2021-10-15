@@ -78,15 +78,15 @@ const LoggedIn = ({ userInfo = {} }) => (
       `}
     >
       <Switch>
-        <Route path='/query/new'>
+        <Route path='/query/new' exact>
           <NewQuery />
         </Route>
 
-        <Route path='/query/:pk'>
+        <Route path='/query/:pk' exact>
           <ExistingQuery />
         </Route>
 
-        <Route>
+        <Route path='/' exact>
           <QueriesList />
         </Route>
       </Switch>
