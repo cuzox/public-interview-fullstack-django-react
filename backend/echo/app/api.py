@@ -107,9 +107,12 @@ def logout(request):
 def query(request, pk=None):
     if request.method == 'POST':
         data = _body_json(request, default={})
-        name = data.get('name')
-        content = data.get('content')
+        name = data.get('name').strip()
+        content = data.get('content').strip()
         user = request.user
+
+        if not content or not name:
+            return Response({ "error": "missing fields" }, status=status.HTTP_400_BAD_REQUEST)
 
         record = models.SavedQueries.objects.create(user=user, name=name, content=content)
         return Response({
@@ -118,9 +121,12 @@ def query(request, pk=None):
     
     if request.method == 'PUT':
         data = _body_json(request, default={})
-        name = data.get('name')
-        content = data.get('content')
+        name = data.get('name').strip()
+        content = data.get('content').strip()
         user = request.user
+
+        if not content or not name:
+            return Response({ "error": "missing fields" }, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             record = models.SavedQueries.objects.get(pk=pk)
