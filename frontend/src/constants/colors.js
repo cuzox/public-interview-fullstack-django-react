@@ -1,5 +1,6 @@
 const Colors = Object.freeze({
-  INTERACTIVE: '#015BC4',
+  INTERACTIVE: '#006be9',
+  INTERACTIVE_DARKER: '#0055b9',
 
   // starts at light(1), goes to dark (10)
   GRAY_1: '#F6F6F6',
