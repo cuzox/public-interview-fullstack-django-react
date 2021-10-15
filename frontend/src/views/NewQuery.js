@@ -50,7 +50,7 @@ const NewQuery = () => {
             }
           `}
         >
-          <Link to='/'>Back</Link>
+          <Link to='/'>← Back</Link>
 
           <Button
             onClick={async (event) => {

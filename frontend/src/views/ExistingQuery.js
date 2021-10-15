@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import Button from 'components/Button'
 import CodeEditor from 'components/CodeEditor'
 import InputText from 'components/InputText'
+import { Link } from 'react-router-dom'
 import { css } from '@emotion/react'
 import useApi from 'hooks/useApi'
 import { useParams } from 'react-router-dom'
@@ -52,9 +53,12 @@ const NewQuery = () => {
       <nav
         css={css`
           display: flex;
-          flex-direction: row-reverse;
+          flex-direction: row;
+          justify-content: space-between;
         `}
       >
+        <Link to='/'>← Saved Queries</Link>
+
         <Button
           onClick={async (event) => {
             event.preventDefault()
