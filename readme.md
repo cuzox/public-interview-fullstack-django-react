@@ -1,6 +1,6 @@
 ## build & run backend docker image
 
-1. `cd /backend/echo`
+1. `cd ./backend/echo`
 2. `docker-compose up --build`
 
 ## connecting to the database
