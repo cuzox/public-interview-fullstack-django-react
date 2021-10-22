@@ -49,26 +49,26 @@ const Table = ({ data = [], mapping = {} }) => {
           padding: 6px 8px;
         }
 
-        tbody tr:first-child td:first-child {
+        tbody tr:first-of-type td:first-of-type {
           border-top-left-radius: 6px;
         }
-        tbody tr:first-child td:last-child {
+        tbody tr:first-of-type td:last-of-type {
           border-top-right-radius: 6px;
         }
-        tbody tr:last-child td:first-child {
+        tbody tr:last-of-type td:first-of-type {
           border-bottom-left-radius: 6px;
         }
-        tbody tr:last-child td:last-child {
+        tbody tr:last-of-type td:last-of-type {
           border-bottom-right-radius: 6px;
         }
-        tbody tr:not(:last-child) td {
+        tbody tr:not(:last-of-type) td {
           border-bottom: none;
         }
-        tbody tr td:not(:last-child) {
+        tbody tr td:not(:last-of-type) {
           border-right: none;
         }
         
-        tbody tr:nth-child(2n) td {
+        tbody tr:nth-of-type(2n) td {
           background: ${colors.GRAY_1};
         }
       `}
