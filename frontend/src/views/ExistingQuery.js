@@ -16,7 +16,7 @@ const ExistingQuery = ({ userInfo }) => {
   const [authorId, setAuthorId] = useState(null)
   // persisted content reflects what is saved to the db
   // we use this to distinguish aginst what is being run ad hoc
-  const [persistedHashCode, _, setPersistedContent] = useHashCode()
+  const [persistedHashCode,, setPersistedContent] = useHashCode()
   // applied content will reflect whatever content is either
   // persisted or being executed ad hoc
   const [appliedHashCode, appliedContent, setAppliedContent] = useHashCode()
