@@ -12,9 +12,12 @@ We want to hide certain functionality from guest users, and upsell them on other
 
 Several of the changes require an "upsell experience." We do not have an exact UI design for this. But it should prompt guest users to upgrade their account to an Editor account.
 
+The upsell should explain that upgrading to an editor role will give the following improvements:
 - Able to download CSV exports
 - Can analyze queries
 - Can view and execute other users' queries
+
+The upsell should have a submit button, which needs to POST to `/upgrade/request`.
 
 ### Guests: Upsell on the Download CSV Link
 
