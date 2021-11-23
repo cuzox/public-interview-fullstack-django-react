@@ -291,3 +291,14 @@ def explain_query(request, pk=None):
         "explanation": explanation,
         "error": error,
     })
+
+
+@login_required
+@api_view(['POST'])
+def upgrade_request(request):
+    # this is a simple placehoder, for the sake of the feature request
+    # you do not need to update this
+    user = request.user
+    if user.role != 'guest':
+        return Response({}, status=status.HTTP_404_NOT_FOUND)
+    return Response({})
