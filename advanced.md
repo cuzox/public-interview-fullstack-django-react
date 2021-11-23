@@ -1,8 +1,3 @@
-## build & run backend docker image
-
-1. `cd ./backend/echo`
-2. `docker-compose up --build`
-
 ## connecting to the database
 
 To avoid conflicting port issues, with an already running postgres, the port of this app's postgres is exposed at `:5555`
