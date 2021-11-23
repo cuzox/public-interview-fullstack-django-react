@@ -10,7 +10,7 @@ We want to hide certain functionality from guest users, and upsell them on other
 
 ### Upsell
 
-Several of the changes require an "upsell experience." We do not have an exact UI design for this. But it should prompt guest users to upgrade their account to an Editor account.
+Several of the changes require an "upsell experience." We do not have an exact UI design for this. But it should prompt guest users to upgrade their account to an editor role.
 
 The upsell should explain that upgrading to an editor role will give the following improvements:
 - Able to download CSV exports
