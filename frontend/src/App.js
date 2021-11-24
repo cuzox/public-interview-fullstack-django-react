@@ -21,7 +21,7 @@ const App = () => {
   const api = useApi()
   
   useEffect(() => {
-    const fetchBoostrap = async () => {
+    const fetchBootstrap = async () => {
       const bootstrap = await api.get('/bootstrap')
       if (bootstrap.authed) {
         setUserInfo(bootstrap.user)
@@ -29,7 +29,7 @@ const App = () => {
       }
       setUserState('guest')
     }
-    fetchBoostrap()
+    fetchBootstrap()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
