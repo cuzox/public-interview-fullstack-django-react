@@ -1,12 +1,18 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useContext } from 'react'
 
 import InputCheckbox from 'components/InputCheckbox'
 import Table from 'components/Table'
+import Upsell from 'components/Upsell'
 import colors from 'constants/colors'
 import { css } from '@emotion/react'
 import useApi from 'hooks/useApi'
+import { UserContext } from '../contexts'
 
 const QueryResults = ({ pk, adHocQuery = null }) => {
+  const userInfo = useContext(UserContext)
+  const userIsGuest = userInfo.role === "guest"
+  const [showUpsell, setShowUpsell] = useState(false)
+
   const [status, setStatus] = useState('pending')
   const [results, setResults] = useState(null)
   const [explanationResult, setExplanationResult] = useState(null)
@@ -23,7 +29,7 @@ const QueryResults = ({ pk, adHocQuery = null }) => {
       }
       return api.get(`/query/${pk}/${action}`)
     }
-  
+
     const fetchResults = async () => {
       setStatus('pending')
       const res = await fireGet('execute')
@@ -111,50 +117,67 @@ const QueryResults = ({ pk, adHocQuery = null }) => {
             <>
               <span className='horiz-space' />
 
-              <span
-                css={css`
-                  align-items: center;
-                  display: flex;
-                  flex-direction: row;
-                  font-size: 12px;
+              { !userIsGuest &&
+                <span
+                  css={css`
+                    align-items: center;
+                    display: flex;
+                    flex-direction: row;
+                    font-size: 12px;
 
-                  label {
-                    cursor: pointer;
-                    margin-left: 6px;
-                  }
-                `}
-              >
-                <InputCheckbox
-                  ref={refExplain}
-                  defaultChecked={explaining}
-                  onChange={() => {
-                    setExplaining(refExplain.current.checked)
-                  }}
-                />
-                <label
-                  onClick={() => {
-                    refExplain.current.checked = !refExplain.current.checked
-                    setExplaining(refExplain.current.checked)
-                  }}
+                    label {
+                      cursor: pointer;
+                      margin-left: 6px;
+                    }
+                  `}
                 >
-                  explain
-                </label>
-              </span>
+                  <InputCheckbox
+                    ref={refExplain}
+                    defaultChecked={explaining}
+                    onChange={() => {
+                      setExplaining(refExplain.current.checked)
+                    }}
+                  />
+                  <label
+                    onClick={() => {
+                      refExplain.current.checked = !refExplain.current.checked
+                      setExplaining(refExplain.current.checked)
+                    }}
+                  >
+                    explain
+                  </label>
+                </span>
+              }
             </>
           )}
         </span>
 
         {status === 'ready' && !haveError && haveData && (
-          <a
-            href={adHocQuery ?
-              `http://localhost:8000/query/ad_hoc/execute/csv?${new URLSearchParams({ content: adHocQuery })}` :
-              `http://localhost:8000/query/${pk}/execute/csv`
-            }
-            download
-          >
-            Download CSV
-          </a>
+          !userIsGuest ? (
+            <a
+              href={adHocQuery ?
+                `http://localhost:8000/query/ad_hoc/execute/csv?${new URLSearchParams({ content: adHocQuery })}` :
+                `http://localhost:8000/query/${pk}/execute/csv`
+              }
+              download
+            >
+              Download CSV
+            </a>
+          ) : (
+            <span css={css`
+              cursor: pointer;
+              color: ${ colors.INTERACTIVE };
+            `}
+            onClick={ () => setShowUpsell(true) }>
+              Download CSV
+            </span>
+          )
         )}
+
+        { showUpsell ?
+          <Upsell hide={() => setShowUpsell(false)} /> :
+          null
+        }
       </header>
 
       <div className='vert-space' />
@@ -190,7 +213,7 @@ const QueryResults = ({ pk, adHocQuery = null }) => {
       {status === 'ready' && !haveError && !explaining && !haveData && (
         <span className='status-explained'>zero rows were returned</span>
       )}
-      
+
       {status === 'ready' && !haveError && !explaining && haveData && (
         <Table
           data={data}

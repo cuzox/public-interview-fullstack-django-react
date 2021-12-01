@@ -1,12 +1,21 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 
 import Button from 'components/Button'
 import { Link } from 'react-router-dom'
 import Table from 'components/Table'
+import Upsell from 'components/Upsell'
 import { css } from '@emotion/react'
 import useApi from 'hooks/useApi'
+import { UserContext } from 'contexts'
+import colors from "../constants/colors"
+
 
 const QueriesList = () => {
+  const userInfo = useContext(UserContext)
+  const userIsGuest = userInfo.role === "guest"
+  const getIsCurrentUser = (id) => userInfo.id === id
+  const [showUpsell, setShowUpsell] = useState(false)
+
   const [list, setList] = useState(null)
   const api = useApi()
 
@@ -59,12 +68,29 @@ const QueriesList = () => {
           ['Title', (row) => row.name],
           ['Author', (row) => row.user_name],
           [null, (row) => (
-            <Link to={`/query/${row.id}`}>
-              View query
-            </Link>
+            !userIsGuest || getIsCurrentUser(row.user_id) ? (
+              <Link to={`/query/${row.id}`}>
+                View query
+              </Link>
+            ) : (
+              <span css={css`
+                  cursor: pointer;
+                  color: ${ colors.INTERACTIVE };
+                `}
+                onClick={ () => setShowUpsell(true) }
+              >
+                View query
+              </span>
+            )
           )]
         ]}
       />
+
+
+        { showUpsell ?
+          <Upsell hide={() => setShowUpsell(false)} /> :
+          null
+        }
     </article>
   )
 }

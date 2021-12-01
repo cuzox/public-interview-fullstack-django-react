@@ -61,6 +61,7 @@ def bootstrap(request):
                 'id': user.id,
                 'email': user.email,
                 'name': "{} {}".format(user.first_name, user.last_name),
+                'role': user.role,
             }
         })
 
@@ -75,7 +76,7 @@ def login(request):
     data = _body_json(request, default={})
     email = data.get('email')
     password = data.get('password')
-    
+
     user = django.contrib.auth.authenticate(email=email, password=password)
     if user is None:
         return Response({
@@ -89,6 +90,7 @@ def login(request):
             'id': user.id,
             'email': user.email,
             'name': "{} {}".format(user.first_name, user.last_name),
+            'role': user.role,
         }
     })
 
@@ -118,7 +120,7 @@ def query(request, pk=None):
         return Response({
             'id': record.id,
         })
-    
+
     if request.method == 'PUT':
         data = _body_json(request, default={})
         name = data.get('name').strip()
@@ -143,7 +145,7 @@ def query(request, pk=None):
         return Response({
             'id': record.id,
         })
-    
+
     if request.method == 'GET':
         try:
             record = models.SavedQueries.objects.get(pk=pk)
@@ -193,13 +195,13 @@ def execute_query(request, pk=None, filetype=None):
     data = None
     error = None
     columns = None
-    
+
     with connections['dvdrental'].cursor() as cursor:
         try:
             cursor.execute(content)
         except Exception as db_err:
             error = str(db_err)
-        
+
         if not error:
             try:
                 data = cursor.fetchall()
@@ -211,14 +213,14 @@ def execute_query(request, pk=None, filetype=None):
                     columns = []
                 else:
                     raise db_err
-    
+
     if filetype is not None:
         if error:
             raise error
-        
+
         if filetype != "csv":
             return Response({}, status=status.HTTP_404_NOT_FOUND)
-        
+
         treated_columns = [
             _treated_csv_cell(cell) for cell in columns
         ]
@@ -274,7 +276,7 @@ def explain_query(request, pk=None):
             cursor.execute(content)
         except Exception as db_err:
             error = str(db_err)
-        
+
         if not error:
             try:
                 explanation = cursor.fetchall()
@@ -286,7 +288,7 @@ def explain_query(request, pk=None):
 
                 else:
                     raise db_err
-    
+
     return Response({
         "explanation": explanation,
         "error": error,

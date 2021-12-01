@@ -8,6 +8,7 @@ import { createBrowserHistory } from 'history'
 import { monaco } from 'react-monaco-editor'
 import monacoDevtoolsTheme from 'monaco-themes/themes/Chrome DevTools.json'
 import useApi from 'hooks/useApi'
+import { UserContext } from 'contexts'
 
 const history = createBrowserHistory()
 
@@ -19,7 +20,7 @@ const App = () => {
   const [userState, setUserState] = useState('pending')
   const [userInfo, setUserInfo] = useState({})
   const api = useApi()
-  
+
   useEffect(() => {
     const fetchBootstrap = async () => {
       const bootstrap = await api.get('/bootstrap')
@@ -54,7 +55,9 @@ const App = () => {
             />
           )}
           {userState === 'authed' && (
-            <LoggedIn userInfo={userInfo} />
+            <UserContext.Provider value={userInfo}>
+              <LoggedIn />
+            </UserContext.Provider>
           )}
         </Route>
       </Switch>
